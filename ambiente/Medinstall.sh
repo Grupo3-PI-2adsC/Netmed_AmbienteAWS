@@ -1,0 +1,135 @@
+#!/bin/bash
+
+PURPLE='0;38'
+NC='\033[0m'
+VERSAO=11
+
+echo -e "${PURPLE}
+____ ____ ____ _ ____ ___ ____ _  _ ___ ____
+|__| [__  [__  | [__   |  |___ |\ |  |  |___
+|  | ___] ___] | ___]  |  |___ | \|  |  |___
+${NC}"
+
+echo -e "${PURPLE}
+███╗   ██╗███████╗████████╗███╗   ███╗███████╗██████╗
+████╗  ██║██╔════╝╚══██╔══╝████╗ ████║██╔════╝██╔══██╗
+██╔██╗ ██║█████╗     ██║   ██╔████╔██║█████╗  ██║  ██║
+██║╚██╗██║██╔══╝     ██║   ██║╚██╔╝██║██╔══╝  ██║  ██║
+██║ ╚████║███████╗   ██║   ██║ ╚═╝ ██║███████╗██████╔╝
+╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝     ╚═╝╚══════╝╚═════╝
+${NC}"
+
+echo ""
+echo ""
+
+# Função para exibir a barra de progresso
+progress_bar() {
+    local duration=$1
+    local elapsed=0
+    local total_blocks=30  # Total de blocos para completar a barra
+    local percent=0
+
+    echo -n "["
+    while [ $elapsed -le $duration ]; do
+        percent=$(( (elapsed * 100) / duration ))
+        local filled_blocks=$(( (elapsed * total_blocks) / duration ))
+
+        # Criar a barra de progresso preenchida
+        local progress_bar=$(printf "%0.s_̲̅" $(seq 1 $filled_blocks))
+
+        # Criar a barra de progresso vazia
+        local empty_blocks=$((total_blocks - filled_blocks))
+        local empty_bar=$(printf "%0.s " $(seq 1 $empty_blocks))
+
+        # Exibir a barra de progresso com a porcentagem ao final
+        echo -ne "${progress_bar}${empty_bar}] ${percent}%\r"
+
+        elapsed=$((elapsed + 1))
+        sleep 1
+    done
+
+    # Garantir que a barra termina em 100%
+    local final_bar=$(printf "%0.s_̲̅" $(seq 1 $total_blocks))
+    echo -ne "${final_bar}] 100%\n"
+}
+
+# Função para verificar se o Java está instalado
+check_java() {
+    if type -p java > /dev/null 2>&1; then
+        echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Java está instalado."
+        return 0
+    else
+        echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Java não está instalado. Vamos instalá-lo."
+        return 1
+    fi
+}
+
+check_docker(){
+    if type -p docker > /dev/null 2>&1; then
+	echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker está instalado."
+	return 0
+    else 
+	echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker não está instalado, vamos instalá-lo"
+	return 1
+    fi
+}
+
+check_compose(){
+    if type -p docker-compose > /dev/null 2>&1; then
+	echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Compose está instalado"
+	return 0
+    else 
+	echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Compose não instalado, começando instalação"
+	return 1
+    fi
+}
+
+# Função para instalar o Java
+install_java() {
+    echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Java, aguarde ^.^"
+
+    sudo apt update && sudo apt upgrade && sudo apt install openjdk-17-jre -y &> /dev/null &
+    progress_bar 15
+    wait
+    echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Java instalado com sucesso."
+}
+
+# Função para instalar o Docker
+install_docker() {
+    echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker, aguarde ^.^"
+    sudo apt install docker.io -y &> /dev/null &
+    progress_bar 20
+    wait
+    echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker instalado com sucesso."
+}
+
+# Função para instalar o Docker Compose
+install_docker_compose() {
+    echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker Compose, aguarde ^.^"
+    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &> /dev/null & progress_bar 25
+    sudo chmod +x /usr/local/bin/docker-compose
+    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    wait
+    echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker Compose instalado com sucesso."
+}
+
+# Função para dar "up" no Docker Compose
+start_docker_compose() {
+    echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Iniciando os serviços com Docker Compose, aguarde ^.^"
+    sudo docker-compose -f ~/ambiente/docker-compose.yml up --build 
+    echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Serviços iniciados."
+}
+
+echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Verificando se o Java está instalado..."
+check_java || install_java
+
+echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Preparando para instalar o Docker..."
+check_docker || install_docker
+
+echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Preparando para instalar o Docker Compose..."
+check_compose || install_docker_compose
+
+echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Iniciando os serviços com Docker Compose..."
+start_docker_compose
+
+echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalação concluída! Obrigado por usar o MedBot! ^.^"

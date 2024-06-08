@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: Netmed#1@@
+      MYSQL_DATABASE: netmed
+      MYSQL_USER: Netmed
+      MYSQL_PASSWORD: Netmed#1@@
+    ports:
+      - "3306:3306"
+    networks:
+      - jasql-network
+
+  login-netmed:
+    build: .
+    container_name: login-netmed-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    networks:
+      - jasql-network
+
+networks:
+  jasql-network:
+    driver: bridge

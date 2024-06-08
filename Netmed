@@ -1,0 +1,43 @@
+#!/bin/bash
+
+echo "$(tput setaf 6)[MedBot]$(tput setaf 7) olá eu sou o MedBot, vamos configurar no momento um método rápido para sua instalação e iniciar."
+sleep 3
+
+# Caminho para o diretório onde o .jar e o script de instalação estão localizados
+DIR="ambiente/Login_netmed/login-netmed/target/"
+
+# Aliases a serem adicionados
+ALIAS1="alias iniciar='cd $DIR && java -jar iniciar.jar'"
+ALIAS2="alias instalar='bash $DIR/Medinstall.sh' "
+
+# Arquivo de configuração do Bash
+BASHRC_FILE="$HOME/.bashrc"
+
+# Função para adicionar um alias e recarregar o arquivo de configuração
+adicionar_alias() {
+    local ALIAS=$1
+    if ! grep -Fxq "$ALIAS" "$BASHRC_FILE"; then
+        echo "$ALIAS" >> "$BASHRC_FILE"
+        echo "$(tput setaf 6)[MedBot]$(tput setaf 7) configuração resultou em Êxito!!"
+    else
+        echo "$(tput setaf 6)[MedBot]$(tput setaf 7) Configuração já existe! "
+    fi
+}
+
+# Adicionar os aliases ao .bashrc
+adicionar_alias "$ALIAS1"
+adicionar_alias "$ALIAS2"
+
+# Recarregar o arquivo de configuração do Bash
+source ~/.bashrc
+
+
+echo "$(tput setaf 6)[MedBot]$(tput setaf 7) Gostaria de iniciar o Script de instalação [S/N]?"
+
+read get
+
+if [[ "$get" == "S" || "$get" == "s" ]]; then
+    bash "$DIR/Medinstall.sh"
+else
+    echo "$(tput setaf 6)[MedBot]$(tput setaf 7) Sem problemas! Se precisar instalar, é só digitar 'instalar' e pressionar a tecla 'Enter'."
+fi
