@@ -1,7 +1,23 @@
 #!/bin/bash
 
 echo "$(tput setaf 6)[MedBot]$(tput setaf 7) olá eu sou o MedBot, vamos configurar no momento um método rápido para sua instalação e iniciar."
-sleep 3
+sleep 2
+# Verifica se o pacote whiptail está instalado
+if ! dpkg -s whiptail &> /dev/null; then
+    # Se não estiver instalado, execute o comando para instalá-lo
+    sudo apt update -y &> /dev/null
+    sudo apt upgrade -y &> /dev/null
+    sudo apt install whiptail -y &> /dev/null
+fi
+
+# Verifica se o pacote pv está instalado
+if ! dpkg -s pv &> /dev/null; then
+    # Se não estiver instalado, execute o comando para instalá-lo
+    sudo apt update -y &> /dev/null
+    sudo apt upgrade -y &> /dev/null
+    sudo apt install pv -y &> /dev/null
+fi
+
 
 # Caminho para o diretório onde o .jar e o script de instalação estão localizados
 DIR="ambiente/"
