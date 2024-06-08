@@ -116,7 +116,7 @@ install_docker_compose() {
 # Função para dar "up" no Docker Compose
 start_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Iniciando os serviços com Docker Compose, aguarde ^.^"
-    sudo docker-compose -f ~/ambiente/docker-compose.yml up --build 
+    sudo docker-compose -f ./ambiente/docker-compose.yml up --build 
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Serviços iniciados."
 }
 

@@ -4,7 +4,7 @@ echo "$(tput setaf 6)[MedBot]$(tput setaf 7) olá eu sou o MedBot, vamos configu
 sleep 3
 
 # Caminho para o diretório onde o .jar e o script de instalação estão localizados
-DIR="ambiente/Login_netmed/login-netmed/target/"
+DIR="ambiente/"
 
 # Aliases a serem adicionados
 ALIAS1="alias iniciar='cd $DIR && java -jar iniciar.jar'"
