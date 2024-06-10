@@ -1,23 +1,21 @@
 #!/bin/bash
 
-PURPLE='0;38'
-NC='\033[0m'
-VERSAO=11
+clear
 
-echo -e "${PURPLE}
+echo -e "
 ____ ____ ____ _ ____ ___ ____ _  _ ___ ____
 |__| [__  [__  | [__   |  |___ |\ |  |  |___
 |  | ___] ___] | ___]  |  |___ | \|  |  |___
-${NC}"
+"
 
-echo -e "${PURPLE}
+echo -e "
 ███╗   ██╗███████╗████████╗███╗   ███╗███████╗██████╗
 ████╗  ██║██╔════╝╚══██╔══╝████╗ ████║██╔════╝██╔══██╗
 ██╔██╗ ██║█████╗     ██║   ██╔████╔██║█████╗  ██║  ██║
 ██║╚██╗██║██╔══╝     ██║   ██║╚██╔╝██║██╔══╝  ██║  ██║
 ██║ ╚████║███████╗   ██║   ██║ ╚═╝ ██║███████╗██████╔╝
 ╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝     ╚═╝╚══════╝╚═════╝
-${NC}"
+"
 
 echo ""
 echo ""
@@ -88,7 +86,9 @@ check_compose(){
 install_java() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Java, aguarde ^.^"
 
-    sudo apt update && sudo apt upgrade && sudo apt install openjdk-17-jre -y &> /dev/null &
+    sudo apt update -y  &> /dev/null
+    sudo apt upgrade -y  &> /dev/null
+    sudo apt install openjdk-17-jre -y &> /dev/null &
     progress_bar 15
     wait
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Java instalado com sucesso."
@@ -106,9 +106,7 @@ install_docker() {
 # Função para instalar o Docker Compose
 install_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker Compose, aguarde ^.^"
-    sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &> /dev/null & progress_bar 25
-    sudo chmod +x /usr/local/bin/docker-compose
-    sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+    curl -SL https://github.com/docker/compose/releases/download/v2.23.0/dockercompose-linux-x86_64 -o /usr/local/bin/docker-compose &> /dev/null & progress_bar 25
     wait
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker Compose instalado com sucesso."
 }
