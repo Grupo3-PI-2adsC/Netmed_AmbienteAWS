@@ -106,7 +106,8 @@ install_docker() {
 # Função para instalar o Docker Compose
 install_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker Compose, aguarde ^.^"
-    sudo curl -SL https://github.com/docker/compose/releases/download/v2.23.0/dockercompose-linux-x86_64 -o /usr/local/bin/docker-compose &> /dev/null & progress_bar 25
+    sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &> /dev/null & progress_bar 25 
+    sudo chmod +x /usr/local/bin/docker-compose
     wait
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker Compose instalado com sucesso."
 }
