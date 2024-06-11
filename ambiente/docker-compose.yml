@@ -14,13 +14,15 @@ services:
     networks:
       - jasql-network
 
-  login-netmed:
+  login-interativo:
     build: .
     container_name: login-netmed-container
     ports:
       - "8080:8080"
     depends_on:
       - mysql
+    stdin_open: true #STDIN aberto
+    tty: true # aloca terminal tty
     networks:
       - jasql-network
 

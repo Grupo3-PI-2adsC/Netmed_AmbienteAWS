@@ -20,6 +20,27 @@ echo -e "
 echo ""
 echo ""
 
+# Função para verificar e instalar pacotes necessários
+verificar_e_instalar_pacotes() {
+    local pacote1="whiptail"
+    local pacote2="pv"
+
+    # Verifica se o pacote whiptail está instalado
+    if ! dpkg -s $pacote1 &> /dev/null; then
+        echo "$(tput setaf 6)[MedBot]$(tput setaf 7): Aguarde um momento..."
+        sudo apt update -y &> /dev/null
+        sudo apt upgrade -y &> /dev/null
+        sudo apt install $pacote1 -y &> /dev/null
+    fi
+
+    # Verifica se o pacote pv está instalado
+    if ! dpkg -s $pacote2 &> /dev/null; then
+        echo "$(tput setaf 6)[MedBot]$(tput setaf 7): Só mais um pouquinho..."
+        sudo apt install $pacote2 -y &> /dev/null
+    fi
+}
+
+
 # Função para exibir a barra de progresso
 progress_bar() {
     local duration=$1
@@ -115,9 +136,12 @@ install_docker_compose() {
 # Função para dar "up" no Docker Compose
 start_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Iniciando os serviços com Docker Compose, aguarde ^.^"
-    sudo docker-compose -f ./ambiente/docker-compose.yml up --build 
+    sudo docker-compose up --build 
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Serviços iniciados."
 }
+
+verificar_e_instalar_pacotes
+
 
 echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Verificando se o Java está instalado..."
 check_java || install_java
