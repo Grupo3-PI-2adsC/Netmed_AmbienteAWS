@@ -2,7 +2,7 @@
 
 clear
 
-echo -e "
+echo -e " $(tput setaf 6)" "
 ____ ____ ____ _ ____ ___ ____ _  _ ___ ____
 |__| [__  [__  | [__   |  |___ |\ |  |  |___
 |  | ___] ___] | ___]  |  |___ | \|  |  |___
@@ -109,7 +109,7 @@ check_compose(){
 # Função para instalar o Java
 install_java() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Java, aguarde ^.^"
-
+    progress_bar 5
     sudo apt update -y &> /dev/null
     sudo apt upgrade -y &> /dev/null
     sudo apt install openjdk-17-jre -y &> /dev/null
@@ -119,6 +119,7 @@ install_java() {
 # Função para instalar o Docker
 install_docker() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker, aguarde ^.^"
+    progress_bar 20
     sudo apt install docker.io -y &> /dev/null
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker instalado com sucesso."
 }
@@ -126,6 +127,7 @@ install_docker() {
 # Função para instalar o Docker Compose
 install_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker Compose, aguarde ^.^"
+    progress_bar 25
     sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &> /dev/null
     sudo chmod +x /usr/local/bin/docker-compose
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker Compose instalado com sucesso."
@@ -134,8 +136,9 @@ install_docker_compose() {
 # Função para dar "up" no Docker Compose
 start_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Iniciando os serviços com Docker Compose, aguarde ^.^"
-    sudo docker build -t login-interativo .
-    sudo docker run -it --rm login-interativo
+    progress_bar 10
+    sudo docker build -t login-interativo . &> /dev/null
+    sudo docker run -it --rm login-interativo 
     sudo docker-compose run login-interativo
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Serviços iniciados."
 }
