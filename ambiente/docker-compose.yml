@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8.1.0
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: Netmed#1@@
@@ -11,8 +11,7 @@ services:
       MYSQL_PASSWORD: Netmed#1@@
     ports:
       - "3306:3306"
-    networks:
-      - jasql-network
+    network_mode: "host"
 
   login-interativo:
     build: .
@@ -21,11 +20,6 @@ services:
       - "8080:8080"
     depends_on:
       - mysql
-    stdin_open: true #STDIN aberto
+    stdin_open: true # STDIN aberto
     tty: true # aloca terminal tty
-    networks:
-      - jasql-network
 
-networks:
-  jasql-network:
-    driver: bridge

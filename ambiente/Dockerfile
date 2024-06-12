@@ -12,4 +12,3 @@ EXPOSE 8080
 
 # Comando para executar a aplicação Java
 CMD ["java", "-jar", "java-grupo-1.0-SNAPSHOT-jar-with-dependencies.jar"]
-
