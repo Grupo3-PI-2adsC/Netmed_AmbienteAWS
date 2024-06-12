@@ -20,6 +20,8 @@ echo -e "
 echo ""
 echo ""
 
+#!/bin/bash
+
 # Função para verificar e instalar pacotes necessários
 verificar_e_instalar_pacotes() {
     local pacote1="whiptail"
@@ -39,7 +41,6 @@ verificar_e_instalar_pacotes() {
         sudo apt install $pacote2 -y &> /dev/null
     fi
 }
-
 
 # Função para exibir a barra de progresso
 progress_bar() {
@@ -83,23 +84,25 @@ check_java() {
     fi
 }
 
+# Função para verificar se o Docker está instalado
 check_docker(){
     if type -p docker > /dev/null 2>&1; then
-	echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker está instalado."
-	return 0
-    else 
-	echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker não está instalado, vamos instalá-lo"
-	return 1
+        echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker está instalado."
+        return 0
+    else
+        echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker não está instalado, vamos instalá-lo"
+        return 1
     fi
 }
 
+# Função para verificar se o Docker Compose está instalado
 check_compose(){
     if type -p docker-compose > /dev/null 2>&1; then
-	echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Compose está instalado"
-	return 0
-    else 
-	echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Compose não instalado, começando instalação"
-	return 1
+        echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Compose está instalado"
+        return 0
+    else
+        echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Compose não instalado, começando instalação"
+        return 1
     fi
 }
 
@@ -107,26 +110,24 @@ check_compose(){
 install_java() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Java, aguarde ^.^"
 
-    sudo apt update -y && sudo apt upgrade -y  &> /dev/null & progress_bar 5
-    sudo apt install openjdk-17-jre -y &> /dev/null & progress_bar 10
-    wait
+    sudo apt update -y &> /dev/null
+    sudo apt upgrade -y &> /dev/null
+    sudo apt install openjdk-17-jre -y &> /dev/null
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Java instalado com sucesso."
 }
 
 # Função para instalar o Docker
 install_docker() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker, aguarde ^.^"
-    sudo apt install docker.io -y &> /dev/null & progress_bar 20
-    wait
+    sudo apt install docker.io -y &> /dev/null
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker instalado com sucesso."
 }
 
 # Função para instalar o Docker Compose
 install_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker Compose, aguarde ^.^"
-    sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &> /dev/null & progress_bar 25 
+    sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose &> /dev/null
     sudo chmod +x /usr/local/bin/docker-compose
-    wait
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker Compose instalado com sucesso."
 }
 
@@ -135,12 +136,11 @@ start_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Iniciando os serviços com Docker Compose, aguarde ^.^"
     sudo docker build -t login-interativo .
     sudo docker run -it --rm login-interativo
-    sudo docker-compose run login-interativo 
+    sudo docker-compose run login-interativo
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Serviços iniciados."
 }
 
-verificar_e_instalar_pacotes
-
+verificar_e_instalar_pacotes &> /dev/null
 
 echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Verificando se o Java está instalado..."
 check_java || install_java
