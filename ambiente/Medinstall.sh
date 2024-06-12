@@ -107,10 +107,8 @@ check_compose(){
 install_java() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Java, aguarde ^.^"
 
-    sudo apt update -y  &> /dev/null
-    sudo apt upgrade -y  &> /dev/null
-    sudo apt install openjdk-17-jre -y &> /dev/null &
-    progress_bar 15
+    sudo apt update -y && sudo apt upgrade -y  &> /dev/null & progress_bar 5
+    sudo apt install openjdk-17-jre -y &> /dev/null & progress_bar 10
     wait
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Java instalado com sucesso."
 }
@@ -118,8 +116,7 @@ install_java() {
 # Função para instalar o Docker
 install_docker() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker, aguarde ^.^"
-    sudo apt install docker.io -y &> /dev/null &
-    progress_bar 20
+    sudo apt install docker.io -y &> /dev/null & progress_bar 20
     wait
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker instalado com sucesso."
 }
