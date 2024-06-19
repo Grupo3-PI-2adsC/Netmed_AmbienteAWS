@@ -19,26 +19,22 @@ echo -e "
 
 echo ""
 echo ""
-
-#!/bin/bash
-
+sleep 1
 # Função para verificar e instalar pacotes necessários
 verificar_e_instalar_pacotes() {
-    local pacote1="whiptail"
-    local pacote2="pv"
-
     # Verifica se o pacote whiptail está instalado
-    if ! dpkg -s $pacote1 &> /dev/null; then
-        echo "$(tput setaf 6)[MedBot]$(tput setaf 7): Aguarde um momento..."
+    if ! dpkg -s whiptail &> /dev/null; then
+        echo "$(tput setaf 6)[MedBot]$(tput setaf 7): Aguarde um momento... atualizando pacotes"
         sudo apt update -y &> /dev/null
         sudo apt upgrade -y &> /dev/null
-        sudo apt install $pacote1 -y &> /dev/null
+	echo "$(tpput setaf 6)[MedBot]$(tput setaf 7): instalando o visualizador da barra de progresso"
+        sudo apt install whiptail -y &> /dev/null
     fi
 
     # Verifica se o pacote pv está instalado
-    if ! dpkg -s $pacote2 &> /dev/null; then
+    if ! dpkg -s pv &> /dev/null; then
         echo "$(tput setaf 6)[MedBot]$(tput setaf 7): Só mais um pouquinho..."
-        sudo apt install $pacote2 -y &> /dev/null
+        sudo apt install pv -y &> /dev/null
     fi
 }
 
@@ -110,8 +106,6 @@ check_compose(){
 install_java() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Java, aguarde ^.^"
     progress_bar 5
-    sudo apt update -y &> /dev/null
-    sudo apt upgrade -y &> /dev/null
     sudo apt install openjdk-17-jre -y &> /dev/null
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Java instalado com sucesso."
 }
@@ -119,7 +113,7 @@ install_java() {
 # Função para instalar o Docker
 install_docker() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Instalando Docker, aguarde ^.^"
-    progress_bar 20
+    progress_bar 25
     sudo apt install docker.io -y &> /dev/null
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Docker instalado com sucesso."
 }
@@ -137,11 +131,12 @@ install_docker_compose() {
 start_docker_compose() {
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Iniciando os serviços com Docker Compose, aguarde ^.^"
     progress_bar 10
-    sudo docker build -t login-interativo . &> /dev/null
-    sudo docker run -it --rm login-interativo 
+    sudo docker build -t login-interativo . &> /dev/null 
     sudo docker-compose run login-interativo
+    sudo docker run -it --rm login-interativo
     echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) Serviços iniciados."
 }
+echo "$(tput setaf 5)[MedBot]:$(tput setaf 7) verificando e instalando pacotes aguarde..."
 
 verificar_e_instalar_pacotes &> /dev/null
 

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   mysql:
-    image: mysql:8.1.0
+    image: mysql:8.0
     container_name: mysql-container
     environment:
       MYSQL_ROOT_PASSWORD: Netmed#1@@
@@ -11,7 +11,6 @@ services:
       MYSQL_PASSWORD: Netmed#1@@
     ports:
       - "3306:3306"
-    network_mode: "host"
 
   login-interativo:
     build: .
